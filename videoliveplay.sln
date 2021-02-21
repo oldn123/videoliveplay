@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30804.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CameraCatch", "CameraCatch\CameraCatch.vcxproj", "{894A2214-C9AA-4116-B0A7-652DB63585A1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "videoliveplay", "videoliveplay\videoliveplay.vcxproj", "{77F4AAA4-0051-480A-9168-A6CB8927FB6E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ffplayer", "player\player\ffplayer.vcxproj", "{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{894A2214-C9AA-4116-B0A7-652DB63585A1}.Debug|x64.ActiveCfg = Debug|Win32
+		{894A2214-C9AA-4116-B0A7-652DB63585A1}.Debug|x86.ActiveCfg = Debug|Win32
+		{894A2214-C9AA-4116-B0A7-652DB63585A1}.Debug|x86.Build.0 = Debug|Win32
+		{894A2214-C9AA-4116-B0A7-652DB63585A1}.Release|x64.ActiveCfg = Release|Win32
+		{894A2214-C9AA-4116-B0A7-652DB63585A1}.Release|x86.ActiveCfg = Release|Win32
+		{894A2214-C9AA-4116-B0A7-652DB63585A1}.Release|x86.Build.0 = Release|Win32
+		{77F4AAA4-0051-480A-9168-A6CB8927FB6E}.Debug|x64.ActiveCfg = Debug|Win32
+		{77F4AAA4-0051-480A-9168-A6CB8927FB6E}.Debug|x86.ActiveCfg = Debug|Win32
+		{77F4AAA4-0051-480A-9168-A6CB8927FB6E}.Debug|x86.Build.0 = Debug|Win32
+		{77F4AAA4-0051-480A-9168-A6CB8927FB6E}.Release|x64.ActiveCfg = Release|Win32
+		{77F4AAA4-0051-480A-9168-A6CB8927FB6E}.Release|x86.ActiveCfg = Release|Win32
+		{77F4AAA4-0051-480A-9168-A6CB8927FB6E}.Release|x86.Build.0 = Release|Win32
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Debug|x64.ActiveCfg = Debug|x64
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Debug|x64.Build.0 = Debug|x64
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Debug|x86.ActiveCfg = Debug|Win32
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Debug|x86.Build.0 = Debug|Win32
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Release|x64.ActiveCfg = Release|x64
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Release|x64.Build.0 = Release|x64
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Release|x86.ActiveCfg = Release|Win32
+		{4DC3B3BC-50AA-4E02-9E1B-E20985A7BD31}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE7BE4F7-82A7-4681-BF7C-A11CE442122E}
+	EndGlobalSection
+EndGlobal

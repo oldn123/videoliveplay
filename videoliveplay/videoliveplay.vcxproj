@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{77F4AAA4-0051-480A-9168-A6CB8927FB6E}</ProjectGuid>
+    <RootNamespace>DesktopSharing</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(ProjectDir)..\objs\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <LibraryPath>D:\sdk\Faac\libfaac\ReleaseDLL;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\sdk\Faac\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(ProjectDir)..\bin\$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
+    <IntDir>$(ProjectDir)..\objs\$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>.\DShowCapture\DirectShow\;D:\sdk\ffmpeg\ffmpeg-4.2.1-win32\include;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__WINDOWS_WASAPI__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>D:\sdk\ffmpeg\ffmpeg-4.2.1-win32\lib;$(ProjectDir)..\libs\portaudio\lib\debug;$(ProjectDir)..\libs\screen_capture\lib\debug;$(ProjectDir)..\libs\screen_capture_lite\lib\debug;.\aacenc\lib;$(ProjectDir)..\bin\$(Platform)\$(Configuration)\videoliveplay\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>libfaac.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)..\libs\ffmpeg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__WINDOWS_WASAPI__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\libs\portaudio\lib\release;$(ProjectDir)..\libs\ffmpeg\lib;$(ProjectDir)..\libs\screen_capture\lib\release;$(ProjectDir)..\libs\screen_capture_lite\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions> /SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
+      <StackReserveSize>
+      </StackReserveSize>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AACEncoder.cpp" />
+    <ClCompile Include="aacenc\FAACEncoder.cpp" />
+    <ClCompile Include="aacenc\PcmBuffer.cpp" />
+    <ClCompile Include="aacenc\PcmToAac.cpp" />
+    <ClCompile Include="AudioCapture.cpp" />
+    <ClCompile Include="CCamCap2.cpp" />
+    <ClCompile Include="DesktopSharing.cpp" />
+    <ClCompile Include="H264Encoder.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="net\Acceptor.cpp" />
+    <ClCompile Include="net\BufferReader.cpp" />
+    <ClCompile Include="net\BufferWriter.cpp" />
+    <ClCompile Include="net\EpollTaskScheduler.cpp" />
+    <ClCompile Include="net\EventLoop.cpp" />
+    <ClCompile Include="net\Logger.cpp" />
+    <ClCompile Include="net\MemoryManager.cpp" />
+    <ClCompile Include="net\NetInterface.cpp" />
+    <ClCompile Include="net\Pipe.cpp" />
+    <ClCompile Include="net\SelectTaskScheduler.cpp" />
+    <ClCompile Include="net\SocketUtil.cpp" />
+    <ClCompile Include="net\TaskScheduler.cpp" />
+    <ClCompile Include="net\TcpConnection.cpp" />
+    <ClCompile Include="net\TcpServer.cpp" />
+    <ClCompile Include="net\TcpSocket.cpp" />
+    <ClCompile Include="net\Timer.cpp" />
+    <ClCompile Include="net\Timestamp.cpp" />
+    <ClCompile Include="ScreenCapture\DXGIScreenCapture.cpp" />
+    <ClCompile Include="WASAPICapture.cpp" />
+    <ClCompile Include="WASAPIPlayer.cpp" />
+    <ClCompile Include="xop\AACSource.cpp" />
+    <ClCompile Include="xop\amf.cpp" />
+    <ClCompile Include="xop\G711ASource.cpp" />
+    <ClCompile Include="xop\H264Parser.cpp" />
+    <ClCompile Include="xop\H264Source.cpp" />
+    <ClCompile Include="xop\H265Source.cpp" />
+    <ClCompile Include="xop\HttpFlvConnection.cpp" />
+    <ClCompile Include="xop\HttpFlvServer.cpp" />
+    <ClCompile Include="xop\MediaSession.cpp" />
+    <ClCompile Include="xop\RtmpConnection.cpp" />
+    <ClCompile Include="xop\RtmpPublisher.cpp" />
+    <ClCompile Include="xop\RtmpServer.cpp" />
+    <ClCompile Include="xop\RtmpSession.cpp" />
+    <ClCompile Include="xop\RtpConnection.cpp" />
+    <ClCompile Include="xop\RtspConnection.cpp" />
+    <ClCompile Include="xop\RtspMessage.cpp" />
+    <ClCompile Include="xop\RtspPusher.cpp" />
+    <ClCompile Include="xop\RtspServer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AACEncoder.h" />
+    <ClInclude Include="aacenc\FAACEncoder.h" />
+    <ClInclude Include="AudioBuffer.h" />
+    <ClInclude Include="AudioCapture.h" />
+    <ClInclude Include="CapInterface.h" />
+    <ClInclude Include="CCamCap2.h" />
+    <ClInclude Include="DesktopSharing.h" />
+    <ClInclude Include="H264Encoder.h" />
+    <ClInclude Include="net\Acceptor.h" />
+    <ClInclude Include="net\BufferReader.h" />
+    <ClInclude Include="net\BufferWriter.h" />
+    <ClInclude Include="net\Channel.h" />
+    <ClInclude Include="net\EpollTaskScheduler.h" />
+    <ClInclude Include="net\EventLoop.h" />
+    <ClInclude Include="net\log.h" />
+    <ClInclude Include="net\Logger.h" />
+    <ClInclude Include="net\MemoryManager.h" />
+    <ClInclude Include="net\NetInterface.h" />
+    <ClInclude Include="net\Pipe.h" />
+    <ClInclude Include="net\RingBuffer.h" />
+    <ClInclude Include="net\SelectTaskScheduler.h" />
+    <ClInclude Include="net\Socket.h" />
+    <ClInclude Include="net\SocketUtil.h" />
+    <ClInclude Include="net\TaskScheduler.h" />
+    <ClInclude Include="net\TcpConnection.h" />
+    <ClInclude Include="net\TcpServer.h" />
+    <ClInclude Include="net\TcpSocket.h" />
+    <ClInclude Include="net\ThreadSafeQueue.h" />
+    <ClInclude Include="net\Timer.h" />
+    <ClInclude Include="net\Timestamp.h" />
+    <ClInclude Include="ScreenCapture\DXGIScreenCapture.h" />
+    <ClInclude Include="WASAPICapture.h" />
+    <ClInclude Include="WASAPIPlayer.h" />
+    <ClInclude Include="xop\AACSource.h" />
+    <ClInclude Include="xop\amf.h" />
+    <ClInclude Include="xop\G711ASource.h" />
+    <ClInclude Include="xop\H264Parser.h" />
+    <ClInclude Include="xop\H264Source.h" />
+    <ClInclude Include="xop\H265Source.h" />
+    <ClInclude Include="xop\HttpFlvConnection.h" />
+    <ClInclude Include="xop\HttpFlvServer.h" />
+    <ClInclude Include="xop\media.h" />
+    <ClInclude Include="xop\MediaSession.h" />
+    <ClInclude Include="xop\MediaSource.h" />
+    <ClInclude Include="xop\rtmp.h" />
+    <ClInclude Include="xop\RtmpConnection.h" />
+    <ClInclude Include="xop\RtmpPublisher.h" />
+    <ClInclude Include="xop\RtmpServer.h" />
+    <ClInclude Include="xop\RtmpSession.h" />
+    <ClInclude Include="xop\rtp.h" />
+    <ClInclude Include="xop\RtpConnection.h" />
+    <ClInclude Include="xop\rtsp.h" />
+    <ClInclude Include="xop\RtspConnection.h" />
+    <ClInclude Include="xop\RtspMessage.h" />
+    <ClInclude Include="xop\RtspPusher.h" />
+    <ClInclude Include="xop\RtspServer.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
