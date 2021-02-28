@@ -56,12 +56,6 @@
     <ClCompile Include="src\play.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\playAudio.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\playVideo.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\player.hpp">
       <Filter>源文件</Filter>
     </ClCompile>

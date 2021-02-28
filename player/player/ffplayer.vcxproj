@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\DesktopSharing\</OutDir>
+    <OutDir>$(ProjectDir)..\..\bin\$(Platform)\$(Configuration)\videoliveplay\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -166,8 +166,6 @@
     <ClCompile Include="SDLWrapper.cpp" />
     <ClCompile Include="src\player.hpp" />
     <ClCompile Include="src\play.cpp" />
-    <ClCompile Include="src\playAudio.cpp" />
-    <ClCompile Include="src\playVideo.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>

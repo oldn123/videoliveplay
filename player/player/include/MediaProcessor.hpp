@@ -122,11 +122,13 @@ static int aac_set_adts_head(ADTSContext* acfg, unsigned char* buf, int size)
     return 0;
 }
 
-int32_t fixPacket(AVCodecContext* codecCtx, AVPacket* pack, std::vector<uint8_t>& datas) {
+int32_t fixPacket(AVCodecContext* codecCtx, AVPacket* pack) {
     if (!pack)
     {
         return 0;
     }
+    
+    std::vector<uint8_t> datas;
 
     ADTSContext AdtsCtx;
     memset(&AdtsCtx, 0, sizeof(ADTSContext));
@@ -156,13 +158,14 @@ class MediaProcessor {
     mutex pktListMutex{};
     int PKT_WAITING_SIZE = 3;
     bool started = false;
-    bool closed = false;
+    bool closed = true;
     bool streamFinished = false;
 
     AVFrame* nextFrame = av_frame_alloc();
     AVPacket* targetPkt = nullptr;
 
     void nextFrameKeeper() {
+        closed = false;
         auto lastPrepareTime = std::chrono::system_clock::now();
         while (!streamFinished && started) {
             std::unique_lock<std::mutex> lk{nextDataMutex};
@@ -194,7 +197,11 @@ protected:
 
     std::atomic<bool> isNextDataReady{false};
 
+    std::shared_ptr<std::thread>    _threadRun;
+
     virtual void generateNextData(AVFrame* f) = 0;
+
+    virtual bool isAudioStream() = 0;
 
     unique_ptr<AVPacket> getNextPkt() {
         if (noMorePkt) {
@@ -216,7 +223,7 @@ protected:
     }
 
     void prepareNextData() {
-        while (!isNextDataReady.load() && !streamFinished) {
+        while (started && !isNextDataReady.load() && !streamFinished) {
             if (targetPkt == nullptr) {
                 if (!noMorePkt) {
                     auto pkt = getNextPkt();
@@ -233,8 +240,15 @@ protected:
                 }
             }
 
-            std::vector<uint8_t> pDatas;
-            fixPacket(codecCtx,targetPkt, pDatas);
+            if (!started)
+            {
+                break;
+            }
+
+            if (isAudioStream())
+            {
+                fixPacket(codecCtx, targetPkt);
+            }
 
             int ret = -1;
             ret = avcodec_send_packet(codecCtx, targetPkt);
@@ -250,7 +264,7 @@ protected:
                 string errorMsg = "+++++++++ ERROR avcodec_send_packet error: ";
                 errorMsg += ret;
                 cout << errorMsg << endl;
-                throw std::runtime_error(errorMsg);
+                //throw std::runtime_error(errorMsg);
             }
 
             ret = avcodec_receive_frame(codecCtx, nextFrame);
@@ -275,6 +289,15 @@ protected:
 
 public:
     ~MediaProcessor() {
+        if (!isClosed())
+        {
+            close();
+        }
+
+        if (_threadRun)
+        {
+            _threadRun->join();
+        }
 
         if (nextFrame != nullptr) {
             av_frame_free(&nextFrame);
@@ -297,9 +320,11 @@ public:
         cout << "~MediaProcessor called. index=" << streamIndex << endl;
     }
     void start() {
-        started = true;
-        std::thread keeper{&MediaProcessor::nextFrameKeeper, this};
-        keeper.detach();
+        if (!started)
+        {
+            started = true;
+            _threadRun = std::make_shared<std::thread>(&MediaProcessor::nextFrameKeeper, this);
+        }
     }
 
     bool close() {
@@ -355,6 +380,7 @@ protected:
         nextFrameTimestamp.store((uint64_t)t);
     }
 
+    virtual bool isAudioStream() { return true; }
 
 public:
     AudioProcessor(const AudioProcessor&) = delete;
@@ -506,6 +532,8 @@ public:
     }
 
     int getVideoIndex() const { return streamIndex; }
+
+    virtual bool isAudioStream() { return false; }
 
     AVFrame* getFrame() {
         if (isNextDataReady.load()) {

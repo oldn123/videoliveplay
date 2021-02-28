@@ -28,7 +28,8 @@ public:
     virtual ffresurlt SetFile(const char*) = 0;
     virtual ffresurlt Play() = 0;
     virtual ffresurlt Stop() = 0;
-    virtual ffresurlt SetPosition(int32_t, int32_t, int32_t, int32_t) = 0;
+    virtual ffresurlt SetBindWindow(HWND) = 0;
+    virtual ffresurlt OnBindWindowMsgIdle() = 0;
 };
 
 class IRtspPlayer : public IVideoPlayer
