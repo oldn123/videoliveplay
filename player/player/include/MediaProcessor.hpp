@@ -123,7 +123,12 @@ static int aac_set_adts_head(ADTSContext* acfg, unsigned char* buf, int size)
 }
 
 int32_t fixPacket(AVCodecContext* codecCtx, AVPacket* pack) {
-    if (!pack)
+    if (!pack || !codecCtx)
+    {
+        return 0;
+    }
+
+    if (codecCtx->codec_id == AV_CODEC_ID_AAC)
     {
         return 0;
     }

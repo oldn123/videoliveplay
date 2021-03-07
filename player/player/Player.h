@@ -26,7 +26,6 @@ public:
     virtual ffresurlt Play() override;
     virtual ffresurlt Stop() override;
     virtual ffresurlt SetBindWindow(HWND) override;
-    virtual ffresurlt OnBindWindowMsgIdle() override;
 
 	IMP_UNKNOWN;
 

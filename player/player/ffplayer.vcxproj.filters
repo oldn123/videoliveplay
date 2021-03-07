@@ -33,6 +33,12 @@
     <ClInclude Include="..\..\include\ffplayer.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="src\SDLRenderer.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VideoRenderer.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -57,6 +63,18 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\player.hpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RtcVideoSink.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SDLRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\VideoRenderer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RtcLogWrite.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

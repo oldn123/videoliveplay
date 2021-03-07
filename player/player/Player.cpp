@@ -43,8 +43,3 @@ ffresurlt Player::SetBindWindow(HWND H)
     _hParentWnd = H;
     return 0;
 }
-
-ffresurlt Player::OnBindWindowMsgIdle() 
-{
-	return onIdle(_pPlayData);
-}

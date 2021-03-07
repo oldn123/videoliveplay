@@ -156,6 +156,8 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SDLWrapper.h" />
+    <ClInclude Include="src\SDLRenderer.h" />
+    <ClInclude Include="src\VideoRenderer.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +168,10 @@
     <ClCompile Include="SDLWrapper.cpp" />
     <ClCompile Include="src\player.hpp" />
     <ClCompile Include="src\play.cpp" />
+    <ClCompile Include="src\RtcLogWrite.cpp" />
+    <ClCompile Include="src\RtcVideoSink.cpp" />
+    <ClCompile Include="src\SDLRenderer.cpp" />
+    <ClCompile Include="src\VideoRenderer.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>

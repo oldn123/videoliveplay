@@ -10,6 +10,8 @@ extern "C"{
 #include "SDL2/SDL.h"
 };
 
+#include "RTCVideoSink.h"
+
 #define REFRESH_EVENT (SDL_USEREVENT + 1)
 
 #define BREAK_EVENT (SDL_USEREVENT + 2)
@@ -56,55 +58,6 @@ namespace {
         cout << "read pkt thread finished." << endl;
     }
 
-    bool refreshFrame(SDL_Renderer* sdlRenderer, SDL_Texture* sdlTexture, VideoProcessor & videoProcessor, AudioProcessor* audio, 
-        bool & faster, int & slowCount, int & fastCount, int & failCount) {
-        if (audio != nullptr) {
-            auto vTs = videoProcessor.getPts();
-            auto aTs = audio->getPts();
-            if (vTs > aTs && vTs - aTs > 30) {
-                cout << "VIDEO FASTER ================= vTs - aTs [" << (vTs - aTs)
-                    << "]ms, SKIP A EVENT" << endl;
-                faster = false;
-                slowCount++;
-                return false ;
-            }
-            else if (vTs < aTs && aTs - vTs > 30) {
-                cout << "VIDEO SLOWER ================= aTs - vTs =[" << (aTs - vTs) << "]ms, Faster" << endl;
-                faster = true;
-                fastCount++;
-            }
-            else {
-                faster = false;
-            }
-        }
-
-        AVFrame* frame = videoProcessor.getFrame();
-
-        if (frame != nullptr) {
-            SDL_UpdateYUVTexture(sdlTexture, NULL,
-
-                frame->data[0], frame->linesize[0],
-
-                frame->data[1], frame->linesize[1],
-
-                frame->data[2], frame->linesize[2]);
-
-            SDL_RenderClear(sdlRenderer);
-            SDL_RenderCopy(sdlRenderer, sdlTexture, NULL, NULL);
-            SDL_RenderPresent(sdlRenderer);
-
-            if (!videoProcessor.refreshFrame()) {
-                cout << "vProcessor.refreshFrame false" << endl;
-            }
-        }
-        else {
-            failCount++;
-            cout << "getFrame fail. failCount = " << failCount << endl;
-        }
-
-        return true;
-    }
-
     class CSDLPlay
     {
     public:
@@ -132,16 +85,6 @@ namespace {
             auto r = m_spAudioProcessor->close();
             r = m_spVideoProcessor->close();
             m_spReaderThread->join();
-
-            if (sdlTexture)
-                SDL_DestroyTexture(sdlTexture);
-
-            if (sdlRenderer)
-                SDL_DestroyRenderer(sdlRenderer);
-
-            if (window)
-                SDL_DestroyWindow(window);
-
             return 0;
         }
 
@@ -161,14 +104,60 @@ namespace {
             m_spAudioProcessor = std::make_shared<AudioProcessor>(formatCtx);
             m_spAudioProcessor->start();
 
+            m_videoSink.StartRenderer();
+
+            return true;
+        }
+
+
+        bool refreshFrame(VideoProcessor& videoProcessor, AudioProcessor* audio,
+            bool& faster, int& slowCount, int& fastCount, int& failCount) {
+            if (audio != nullptr) {
+                auto vTs = videoProcessor.getPts();
+                auto aTs = audio->getPts();
+                if (vTs > aTs && vTs - aTs > 30) {
+                    cout << "VIDEO FASTER ================= vTs - aTs [" << (vTs - aTs)
+                        << "]ms, SKIP A EVENT" << endl;
+                    faster = false;
+                    slowCount++;
+                    return false;
+                }
+                else if (vTs < aTs && aTs - vTs > 30) {
+                    cout << "VIDEO SLOWER ================= aTs - vTs =[" << (aTs - vTs) << "]ms, Faster" << endl;
+                    faster = true;
+                    fastCount++;
+                }
+                else {
+                    faster = false;
+                }
+            }
+
+            AVFrame* frame = videoProcessor.getFrame();
+
+            if (frame != nullptr) {
+               
+                m_videoSink.renderYuv(videoProcessor.getWidth(), videoProcessor.getHeight(), frame->data[0], frame->linesize[0],
+
+                    frame->data[1], frame->linesize[1],
+
+                    frame->data[2], frame->linesize[2]);
+
+                if (!videoProcessor.refreshFrame()) {
+                    cout << "vProcessor.refreshFrame false" << endl;
+                }
+            }
+            else {
+                failCount++;
+                cout << "getFrame fail. failCount = " << failCount << endl;
+            }
+
             return true;
         }
 
         void refreshPicture() {
             while (!exit) {
-                SDL_Event event;
-                event.type = REFRESH_EVENT;
-                SDL_PushEvent(&event);
+                refreshFrame( *m_spVideoProcessor, m_spAudioProcessor.get(),faster, slowCount, fastCount, failCount);
+
                 int time = 1000 / m_spVideoProcessor->getFrameRate();
                 if (faster) {
                     std::this_thread::sleep_for(std::chrono::milliseconds(time / 2));
@@ -179,7 +168,7 @@ namespace {
             }
         }
 
-        bool onIdle(){
+        bool onIdle() {
             SDL_Event event;
             if (SDL_PollEvent(&event))
             {
@@ -193,11 +182,11 @@ namespace {
                 }
                 else if (event.type == REFRESH_EVENT)
                 {
-                    refreshFrame(sdlRenderer, sdlTexture, *m_spVideoProcessor, m_spAudioProcessor.get(),
+                    refreshFrame(*m_spVideoProcessor, m_spAudioProcessor.get(),
                         faster, slowCount, fastCount, failCount);
                 }
             }
-    
+
             return true;
         }
 
@@ -226,30 +215,7 @@ namespace {
                 bVideoOk = true;
             }
 
-            if (!hWnd)
-            {
-                window = SDL_CreateWindow("player", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height,
-                    SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-            }
-            else
-            {
-                window = SDL_CreateWindowFrom(hWnd);
-            }
-
-            if (!window) {
-                string errMsg = "could not create window";
-                errMsg += SDL_GetError();
-                cout << errMsg << endl;
-                throw std::runtime_error(errMsg);
-            }
-
-            auto wid = SDL_GetWindowID(window);
-
-            sdlRenderer = SDL_CreateRenderer(window, -1, 0);
-
-            Uint32 pixFormat = SDL_PIXELFORMAT_IYUV;
-
-            sdlTexture = SDL_CreateTexture(sdlRenderer, pixFormat, SDL_TEXTUREACCESS_STREAMING, width, height);
+            m_videoSink.setVideoWindow(hWnd);
 
             if (bVideoOk)
             {
@@ -367,10 +333,7 @@ namespace {
 
         SDL_AudioDeviceID m_audioDeviceId;
 
-        SDL_Window* window = nullptr;
-        SDL_Renderer* sdlRenderer = nullptr;
-        SDL_Texture* sdlTexture = nullptr;
-
+        RtcVideoSink m_videoSink;
 
         bool exit = false;
         bool faster = false;
