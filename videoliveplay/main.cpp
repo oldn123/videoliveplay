@@ -55,9 +55,9 @@ void PlayThread()
         pPlayer->Init();
         //pPlayer->SetFile("rtsp://123.57.41.232/live");
         //pPlayer->SetFile(/*"rtsp://127.0.0.1:8554/live3"*/"F:\\BaiduNetdiskDownload\\wrq.mp4");
-		pPlayer->SetFile("D:\\Downloads\\H.264 interlaced_cut.mp4");
+        pPlayer->SetFile("https://vod.pipi.cn/43903a81vodtransgzp1251246104/bbd4f07a5285890808066187974/v.f42906.mp4");
+		//pPlayer->SetFile("D:\\Downloads\\H.264 interlaced_cut.mp4");
         pPlayer->Play();
-        pPlayer->SetPosition(500, 500, 1000, 1000);
 	}
 
 	MSG msg = {};

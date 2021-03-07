@@ -29,7 +29,6 @@ public:
     virtual ffresurlt Play() = 0;
     virtual ffresurlt Stop() = 0;
     virtual ffresurlt SetBindWindow(HWND) = 0;
-    virtual ffresurlt OnBindWindowMsgIdle() = 0;
 };
 
 class IRtspPlayer : public IVideoPlayer

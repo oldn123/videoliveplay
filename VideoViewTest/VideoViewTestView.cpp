@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CVideoViewTestView, CView)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, &CVideoViewTestView::OnFilePrintPreview)
 	ON_WM_CONTEXTMENU()
 	ON_WM_RBUTTONUP()
+    ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CVideoViewTestView 构造/析构
@@ -174,8 +175,9 @@ void PlayThread(HWND hW)
     if (pPlayer)
     {
         pPlayer->Init();
-        //pPlayer->SetFile("rtsp://123.57.41.232/live");
-        pPlayer->SetFile("D:\\Downloads\\H.264 interlaced_cut.mp4");
+        pPlayer->SetFile("rtsp://123.57.41.232/live");
+        //pPlayer->SetFile("D:\\Downloads\\H.264 interlaced_cut.mp4");
+        //pPlayer->SetFile("https://vod.pipi.cn/43903a81vodtransgzp1251246104/bbd4f07a5285890808066187974/v.f42906.mp4");
         pPlayer->SetBindWindow(hW);
         pPlayer->Play();
     }
@@ -192,10 +194,10 @@ void PlayThread(HWND hW)
 }
 
 void OnAppIdle() {
-    if (pPlayer)
-    {
-        pPlayer->OnBindWindowMsgIdle();
-    }
+//     if (pPlayer)
+//     {
+//         pPlayer->OnBindWindowMsgIdle();
+//     }
 }
 
 void CVideoViewTestView::OnInitialUpdate()
@@ -207,12 +209,6 @@ void CVideoViewTestView::OnInitialUpdate()
 
 
     PlayThread(GetSafeHwnd());
-
-
-
-
-
-
 
 
 
@@ -239,4 +235,16 @@ void CVideoViewTestView::OnInitialUpdate()
 // 
 // 		}
 // 	}
+}
+
+
+void CVideoViewTestView::OnTimer(UINT_PTR nIDEvent)
+{
+    // TODO: 在此添加消息处理程序代码和/或调用默认值
+
+    CView::OnTimer(nIDEvent);
+
+    if (nIDEvent == 100)
+    {
+    }
 }
